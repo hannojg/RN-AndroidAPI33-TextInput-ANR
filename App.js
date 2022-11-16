@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, SafeAreaView, StyleSheet} from 'react-native';
 import EditTextView from './EditTextView';
 
+// Already ~8 children are enough to cause the issue
 const hundredItems = Array.from({length: 100}, (_, i) => i);
 
 const renderItem = ({item}) => <Text style={styles.text}>Item #{item}</Text>;
