@@ -1,11 +1,30 @@
 import React from 'react';
-import {View, Text, SafeAreaView, StyleSheet} from 'react-native';
+import {View, Text, FlatList, StyleSheet} from 'react-native';
 import EditTextView from './EditTextView';
 
 // Already ~8 children are enough to cause the issue
-const hundredItems = Array.from({length: 8}, (_, i) => i);
+const hundredItems = Array.from({length: 100}, (_, i) => i);
 
-const renderItem = ({item}) => <Text style={styles.text}>Item #{item}</Text>;
+const renderItem = ({item}) => (
+  <View
+    style={{
+      transform: [{matrix: scaleYInvertedMatrix}],
+    }}>
+    <Text style={styles.text}>Item #{item}</Text>
+  </View>
+);
+
+// THIS MATRIX, ALTHOUGH CORRECT, DOESN'T WORK
+// const scaleYInvertedMatrix = [1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
+
+// THIS ONE DOES:
+const scaleYInvertedMatrix = [
+  // seems to work
+  -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1,
+];
+
+// scaleYInvertedMatrix to transform operations:
+// scaleX(-1) scaleY(-1) translate(0, 0)
 
 // The inverted prop adds a style to the FlatList as array,
 // and somehow thats causing the issue i believe. When not setting
@@ -13,34 +32,13 @@ const renderItem = ({item}) => <Text style={styles.text}>Item #{item}</Text>;
 const App = () => {
   return (
     <View style={styles.flex1}>
-      <View
+      <FlatList
+        data={hundredItems}
+        renderItem={renderItem}
         style={{
-          flex: 1,
-          transform: [{ matrix: [ // seems to work
-              -1, 0, 0, 0,
-              0, 1, 0, 0,
-              0, 0, 1, 0,
-              0, 0, 0, -1
-            ]
-          }],
-        }}>
-        <View
-          style={{
-            transform: [{ matrix: [ // seems to work
-                -1, 0, 0, 0,
-                0, 1, 0, 0,
-                0, 0, 1, 0,
-                0, 0, 0, -1
-              ]
-            }],
-          }}>
-          {hundredItems.reverse().map(item => (
-            <View key={item} style={styles.item}>
-              {renderItem({item})}
-            </View>
-          ))}
-        </View>
-      </View>
+          transform: [{matrix: scaleYInvertedMatrix}],
+        }}
+      />
       <EditTextView style={styles.input} />
     </View>
   );
