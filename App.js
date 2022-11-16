@@ -13,20 +13,12 @@ const renderItem = ({item}) => <Text style={styles.text}>Item #{item}</Text>;
 export default () => {
   return (
     <SafeAreaView style={styles.flex1}>
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: 'red',
-          transform: [{scaleY: -1}],
-        }}>
-        <View
-          style={{
-            transform: [{scaleY: -1}],
-          }}>
-          {hundredItems.reverse().map(item => (
-            <View key={item}>{renderItem({item})}</View>
-          ))}
-        </View>
+      <View style={styles.list}>
+        {hundredItems.map(item => (
+          <View key={item} style={styles.item}>
+            {renderItem({item})}
+          </View>
+        ))}
       </View>
       <EditTextView style={styles.input} />
     </SafeAreaView>
@@ -47,5 +39,12 @@ const styles = StyleSheet.create({
     height: 50,
     width: '100%',
     borderWidth: StyleSheet.hairlineWidth,
+  },
+  list: {
+    flex: 1,
+    transform: [{rotate: '180deg'}],
+  },
+  item: {
+    transform: [{rotate: '180deg'}],
   },
 });
