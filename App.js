@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, SafeAreaView, StyleSheet, VirtualizedList} from 'react-native';
+import {View, Text, SafeAreaView, StyleSheet} from 'react-native';
 import EditTextView from './EditTextView';
 
 const hundredItems = Array.from({length: 100}, (_, i) => i);
@@ -12,29 +12,21 @@ const renderItem = ({item}) => <Text style={styles.text}>Item #{item}</Text>;
 export default () => {
   return (
     <SafeAreaView style={styles.flex1}>
-      <VirtualizedList
-        inverted
-        // NOTE: this doesn't crash
-        // style={{
-        //   transform: [
-        //     {
-        //       scaleY: -1,
-        //     },
-        //   ],
-        // }}
-        // contentContainerStyle={{
-        //   transform: [
-        //     {
-        //       scaleY: -1,
-        //     },
-        //   ],
-        // }}
-        data={hundredItems}
-        getItemCount={() => hundredItems.length}
-        getItem={(data, index) => data[index]}
-        keyExtractor={item => item.toString()}
-        renderItem={renderItem}
-      />
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: 'red',
+          transform: [{scaleY: -1}],
+        }}>
+        <View
+          style={{
+            transform: [{scaleY: -1}],
+          }}>
+          {hundredItems.reverse().map(item => (
+            <View key={item}>{renderItem({item})}</View>
+          ))}
+        </View>
+      </View>
       <EditTextView style={styles.input} />
     </SafeAreaView>
   );
