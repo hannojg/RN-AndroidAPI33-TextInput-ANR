@@ -1,23 +1,41 @@
 import React from 'react';
-import {
-  Text,
-  SafeAreaView,
-  StyleSheet,
-  TextInput,
-  FlatList,
-} from 'react-native';
+import {Text, SafeAreaView, StyleSheet, VirtualizedList} from 'react-native';
+import EditTextView from './EditTextView';
 
 const hundredItems = Array.from({length: 100}, (_, i) => i);
 
+const renderItem = ({item}) => <Text style={styles.text}>Item #{item}</Text>;
+
+// The inverted prop adds a style to the FlatList as array,
+// and somehow thats causing the issue i believe. When not setting
+// the inverted prop, the issue is not present.
 export default () => {
   return (
     <SafeAreaView style={styles.flex1}>
-      <FlatList
+      <VirtualizedList
         inverted
+        // NOTE: this doesn't crash
+        // style={{
+        //   transform: [
+        //     {
+        //       scaleY: -1,
+        //     },
+        //   ],
+        // }}
+        // contentContainerStyle={{
+        //   transform: [
+        //     {
+        //       scaleY: -1,
+        //     },
+        //   ],
+        // }}
         data={hundredItems}
-        renderItem={({item}) => <Text style={styles.text}>Item #{item}</Text>}
+        getItemCount={() => hundredItems.length}
+        getItem={(data, index) => data[index]}
+        keyExtractor={item => item.toString()}
+        renderItem={renderItem}
       />
-      <TextInput style={styles.input} />
+      <EditTextView style={styles.input} />
     </SafeAreaView>
   );
 };

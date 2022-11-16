@@ -279,7 +279,7 @@ dependencies {
     }
 }
 
-if (isNewArchitectureEnabled()) {
+//if (isNewArchitectureEnabled()) {
     // If new architecture is enabled, we let you build RN from source
     // Otherwise we fallback to a prebuilt .aar bundled in the NPM package.
     // This will be applied to all the imported transtitive dependency.
@@ -293,7 +293,7 @@ if (isNewArchitectureEnabled()) {
                     .because("On New Architecture we're building Hermes from source")
         }
     }
-}
+//}
 
 // Run this once to be able to run the application with BUCK
 // puts all compile dependencies into folder libs for BUCK to use
